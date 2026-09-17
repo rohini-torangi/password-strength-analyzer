@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Password Security Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Password Security Analyzer</h1>
+
+    <p class="subtitle">
+        Password Strength Evaluation using SHA-256 and OTP Verification
+    </p>
+
+    <div class="card">
+
+        <h2>Check Password Strength</h2>
+
+        <form method="POST">
+
+            <label>Enter Password</label>
+
+            <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit">
+                Analyze Password
+            </button>
+
+        </form>
+
+        {% if result %}
+
+        <div class="result">
+
+            <h2>Security Result</h2>
+
+            <p>
+                <b>Security Score:</b>
+                {{ score }}/5
+            </p>
+
+            <p>
+                <b>Password Strength:</b>
+                <span class="strength">{{ strength }}</span>
+            </p>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width: {{ score * 20 }}%;">
+                </div>
+            </div>
+
+            <h3>SHA-256 Hash</h3>
+
+            <div class="hash">
+                {{ hashed_password }}
+            </div>
+
+            <h3>Security Recommendations</h3>
+
+            {% if suggestions %}
+
+            <ul>
+                {% for suggestion in suggestions %}
+                    <li>{{ suggestion }}</li>
+                {% endfor %}
+            </ul>
+
+            {% else %}
+
+            <p>Your password meets all basic security requirements.</p>
+
+            {% endif %}
+
+            <h3>OTP Verification</h3>
+
+            <p class="otp">
+                {{ otp_message }}
+            </p>
+
+            <form method="POST" action="/verify">
+
+                <input
+                    type="text"
+                    name="otp"
+                    placeholder="Enter 6-digit OTP"
+                    maxlength="6"
+                    required
+                >
+
+                <button type="submit">
+                    Verify OTP
+                </button>
+
+            </form>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
